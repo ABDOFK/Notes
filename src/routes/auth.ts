@@ -7,7 +7,7 @@ import { User, userValidationSchema } from "../models/User";
 const router = express.Router();
 const JWT_SECRET = "your_secret_key";
 
-// Register a new user
+
 router.post("/register", async (req: Request, res: Response) => {
   const validation = userValidationSchema.safeParse(req.body);
 
@@ -18,16 +18,16 @@ router.post("/register", async (req: Request, res: Response) => {
   const { username, email, password } = validation.data;
 
   try {
-    // Check if the user already exists
+   
     const existingUser = await User.findOne({ email });
     if (existingUser) {
       return res.status(400).json({ message: "User already exists" });
     }
 
-    // Hash the password
+    
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Create the new user
+    
     const user = new User({ username, email, password: hashedPassword });
     await user.save();
 
@@ -38,7 +38,7 @@ router.post("/register", async (req: Request, res: Response) => {
   }
 });
 
-// Login a user
+
 router.post("/login", async (req: Request, res: Response) => {
   const loginSchema = z.object({
     email: z.string().email("Invalid email address"),
@@ -59,13 +59,13 @@ router.post("/login", async (req: Request, res: Response) => {
       return res.status(400).json({ message: "User not found" });
     }
 
-    // Check if the password is correct
+    
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
       return res.status(400).json({ message: "Incorrect password" });
     }
 
-    // Create a JWT token
+    
     const token = jwt.sign({ userId: user._id }, JWT_SECRET, {
       expiresIn: "1h",
     });

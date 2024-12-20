@@ -1,14 +1,12 @@
 import mongoose, { Schema, Document, Types } from "mongoose";
 import { z } from "zod";
 
-// Define Zod schema for Note validation
 export const noteValidationSchema = z.object({
   title: z.string().min(1, "Title is required"),
   content: z.string().min(1, "Content is required"),
-  userId: z.string().uuid()  // Reference to the User ID
+  userId: z.string().uuid()  
 });
 
-// Define Mongoose schema and types for Note
 interface INote extends Document {
   title: string;
   content: string;
